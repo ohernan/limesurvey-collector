@@ -30,6 +30,12 @@ public class LimeSurveyDataCollector {
 		return input;
 	}
 
+    private static double parseValue(String value) {
+        if (value.indexOf("A") == 0) { value = value.substring(1); }
+        try { return Double.parseDouble(value); } catch (Exception e) { }
+        return -1;
+    }
+
 	public static void main(String[] args) throws Exception {
 		JSONObject input;
 		if (args.length > 0 && "--stdin-conf".equals(args[args.length - 1])) {
@@ -62,7 +68,7 @@ public class LimeSurveyDataCollector {
 				outObj.put("type", COLLECTOR_DATATYPE);
 				outObj.put("target", entity);
 				
-				outObj.put("value", String.valueOf(questionAnswers.get(key)));
+				outObj.put("value", parseValue(String.valueOf(questionAnswers.get(key))));
 				outArray.put(outObj);
 			}
 		}
