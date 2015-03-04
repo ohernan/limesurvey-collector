@@ -1,5 +1,6 @@
 package eu.riscoss.datacollectors;
 
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -33,7 +34,7 @@ public class LimeSurveyClient {
 
 	private HttpClient client = HttpClientBuilder.create().build();
 
-	/**
+	/** 
 	 * Constructor of LimeSurveyClients
 	 * 
 	 * @param username
@@ -51,13 +52,57 @@ public class LimeSurveyClient {
 
 	protected String formatAnswer(String answer) {
 		if (answer.trim().isEmpty())
-			answer = "0";
+			return "0";
+		else {
+			switch (answer.toUpperCase()) {
+			case "ZERO":
+			case "N": {
+				return "0";
+
+			}
+			case "HALF": {
+				return "0.5";
+			}
+			case "ONE":
+			case "Y": {
+				return "1";
+			}
+			case "TWO": {
+				return "2";
+			}
+			case "TREE": {
+				return "3";
+			}
+			case "FOUR": {
+				return "4";
+			}
+			case "FIVE": {
+				return "5";
+			}
+			case "SIX": {
+				return "6";
+			}
+			case "SEVEN": {
+				return "7";
+			}
+			case "EIGHT": {
+				return "8";
+			}
+			case "NINE": {
+				return "9";
+			}
+			case "TEN": {
+				return "10";
+			}
+
+			}
+		}
 		return answer;
 
 	}
 
 	protected String formatQuestion(String question) {
-	
+
 		Pattern pattern = Pattern.compile("\\[(.*?)\\]");
 		Matcher matcher = pattern.matcher(question);
 		if (matcher.find()) {
@@ -73,6 +118,8 @@ public class LimeSurveyClient {
 		ignoredKeys.add("lastpage");
 		ignoredKeys.add("submitdate");
 		ignoredKeys.add("startlanguage");
+		ignoredKeys.add("datestamp");
+		ignoredKeys.add("startdate");
 		return ignoredKeys.contains(key);
 	}
 
@@ -222,15 +269,6 @@ public class LimeSurveyClient {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public static void main(String args[]) throws ClientProtocolException,
-			IOException {
-		LimeSurveyClient limeSurveyClient = new LimeSurveyClient("riscoss",
-				"BxsLm4nLs7W5", "http://limesurvey.merit.unu.edu");
-		Hashtable<String, String> questionAnswers = limeSurveyClient
-				.getResponse(584477, 15);
-
-		System.out.println(questionAnswers);
-
-	}
+	
 
 }
